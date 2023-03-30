@@ -27,9 +27,9 @@ public:
 			const float extents = 0.99f * size;
 			const b2Vec2 vertices[] = {
 				{ -extents,-extents },
-				{  extents,-extents },
+				{  -extents,extents },
 				{  extents, extents },
-				{ -extents, extents }
+				{ extents, -extents }
 			};
 			b2ChainShape chain;
 			chain.CreateLoop( vertices,4 );
@@ -40,7 +40,8 @@ public:
 			fixtureDef.restitution = 1.0f;
 			pBody->CreateFixture( &fixtureDef );
 		}
-		pBody->SetUserData( this );
+		//pBody->SetUserData( this );
+		pBody->GetUserData().pointer = reinterpret_cast<std::uintptr_t>(this);
 	}
 	float GetSize() const
 	{
