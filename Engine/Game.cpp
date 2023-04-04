@@ -59,6 +59,14 @@ Game::Game( MainWindow& wnd )
 
 				std::stringstream msg;
 				msg << "Collision between " << typeId0.name() << " and " << typeId1.name() << std::endl;
+
+				// delete boxes if they collide
+				if (typeId0 == typeId1)
+				{
+					msg << "Box Deleted." << std::endl;
+				}
+				boxPtrs[0]->MarkForDelete();
+
 				OutputDebugStringA( msg.str().c_str() );
 			}
 		}
@@ -79,6 +87,9 @@ void Game::UpdateModel()
 {
 	const float dt = ft.Mark();
 	world.Step( dt,8,3 );
+
+	// remove deleted boxes
+	boxPtrs.erase(std::remove_if(boxPtrs.begin(), boxPtrs.end(), std::mem_fn(&Box::IsBeingDeleted)), boxPtrs.end());
 }
 
 void Game::ComposeFrame()

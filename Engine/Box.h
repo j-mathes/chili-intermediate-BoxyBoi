@@ -92,6 +92,17 @@ public:
 	{
 		return *pColorTrait;
 	}
+
+	void MarkForDelete()
+	{
+		isMarkedForDelete = true;
+	}
+
+	bool IsBeingDeleted() const
+	{
+		return isMarkedForDelete;
+	}
+
 private:
 	static void Init()
 	{
@@ -106,4 +117,5 @@ private:
 	float size;
 	BodyPtr pBody;
 	std::unique_ptr<ColorTrait> pColorTrait;
+	bool isMarkedForDelete = false;
 };
