@@ -32,10 +32,10 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	world( { 0.0f,-0.5f } ),
-	pepe( gfx )
+	pipeline( gfx )
 {
-	pepe.effect.vs.cam.SetPos( { 0.0,0.0f } );
-	pepe.effect.vs.cam.SetZoom( 1.0f / boundarySize );
+	pipeline.effect.vs.cam.SetPos( { 0.0,0.0f } );
+	pipeline.effect.vs.cam.SetZoom( 1.0f / boundarySize );
 
 	std::generate_n( std::back_inserter( boxPtrs ),nBoxes,[this]() {
 		return Box::Spawn( boxSize,bounds,world,rng );
@@ -54,17 +54,17 @@ Game::Game( MainWindow& wnd )
 					reinterpret_cast<Box*>(bodyPtrs[0]->GetUserData().pointer),
 					reinterpret_cast<Box*>(bodyPtrs[1]->GetUserData().pointer)
 				};
-				auto& tid0 = typeid(boxPtrs[0]->GetColorTrait());
-				auto& tid1 = typeid(boxPtrs[1]->GetColorTrait());
+				auto& typeId0 = typeid(boxPtrs[0]->GetColorTrait());
+				auto& typeId1 = typeid(boxPtrs[1]->GetColorTrait());
 
 				std::stringstream msg;
-				msg << "Collision between " << tid0.name() << " and " << tid1.name() << std::endl;
+				msg << "Collision between " << typeId0.name() << " and " << typeId1.name() << std::endl;
 				OutputDebugStringA( msg.str().c_str() );
 			}
 		}
 	};
-	static Listener mrLister;
-	world.SetContactListener( &mrLister );
+	static Listener mrListener;
+	world.SetContactListener( &mrListener );
 }
 
 void Game::Go()
@@ -85,6 +85,6 @@ void Game::ComposeFrame()
 {
 	for( const auto& p : boxPtrs )
 	{
-		p->Draw( pepe );
+		p->Draw( pipeline );
 	}
 }

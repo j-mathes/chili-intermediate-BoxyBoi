@@ -4,11 +4,11 @@
 #include "Graphics.h"
 #include "Triangle.h"
 #include "IndexedTriangleList.h"
-#include "PubeScreenTransformer.h"
+#include "PerspectiveScreenTransformer.h"
 #include "Mat3.h"
 #include <algorithm>
 
-// triangle drawing pipeline with programable
+// triangle drawing pipeline with programmable
 // pixel shading stage
 template<class Effect>
 class Pipeline
@@ -85,7 +85,7 @@ private:
 	//   it0, it1, etc. stand for interpolants
 	//   (values which are interpolated across a triangle in screen space)
 	//
-	// entry point for tri rasterization
+	// entry point for tri rastrization
 	// sorts vertices, determines case, splits to flat tris, dispatches to flat tri funcs
 	void DrawTriangle( const Triangle<GSOut>& triangle )
 	{
@@ -138,7 +138,7 @@ private:
 							  const GSOut& it1,
 							  const GSOut& it2 )
 	{
-		// calulcate dVertex / dy
+		// calculate dVertex / dy
 		// change in interpolant for every 1 change in y
 		const float delta_y = it2.pos.y - it0.pos.y;
 		const auto dit0 = (it2 - it0) / delta_y;
@@ -155,7 +155,7 @@ private:
 								 const GSOut& it1,
 								 const GSOut& it2 )
 	{
-		// calulcate dVertex / dy
+		// calculate dVertex / dy
 		// change in interpolant for every 1 change in y
 		const float delta_y = it2.pos.y - it0.pos.y;
 		const auto dit0 = (it1 - it0) / delta_y;
@@ -180,11 +180,11 @@ private:
 		// create edge interpolant for left edge (always v0)
 		auto itEdge0 = it0;
 
-		// calculate start and end scanlines
+		// calculate start and end scan lines
 		const int yStart = (int)ceil( it0.pos.y - 0.5f );
-		const int yEnd = (int)ceil( it2.pos.y - 0.5f ); // the scanline AFTER the last line drawn
+		const int yEnd = (int)ceil( it2.pos.y - 0.5f ); // the scan line AFTER the last line drawn
 
-		// do interpolant prestep
+		// do interpolant pre-step
 		itEdge0 += dv0 * (float( yStart ) + 0.5f - it0.pos.y);
 		itEdge1 += dv1 * (float( yStart ) + 0.5f - it0.pos.y);
 
@@ -194,16 +194,16 @@ private:
 			const int xStart = (int)ceil( itEdge0.pos.x - 0.5f );
 			const int xEnd = (int)ceil( itEdge1.pos.x - 0.5f ); // the pixel AFTER the last pixel drawn
 
-			// create scanline interpolant startpoint
+			// create scan line interpolant start-point
 			// (some waste for interpolating x,y,z, but makes life easier not having
 			//  to split them off, and z will be needed in the future anyways...)
 			auto iLine = itEdge0;
 
-			// calculate delta scanline interpolant / dx
+			// calculate delta scan line interpolant / dx
 			const float dx = itEdge1.pos.x - itEdge0.pos.x;
 			const auto diLine = (itEdge1 - iLine) / dx;
 
-			// prestep scanline interpolant
+			// pre-step scan line interpolant
 			iLine += diLine * (float( xStart ) + 0.5f - itEdge0.pos.x);
 
 			for( int x = xStart; x < xEnd; x++,iLine += diLine )
@@ -218,5 +218,5 @@ public:
 	Effect effect;
 private:
 	Graphics& gfx;
-	PubeScreenTransformer pst;
+	PerspectiveScreenTransformer pst;
 };

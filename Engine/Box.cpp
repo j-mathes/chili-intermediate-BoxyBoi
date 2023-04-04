@@ -102,5 +102,6 @@ std::unique_ptr<Box> Box::Spawn( float size,const Boundaries& bounds,b2World& wo
 		break;
 	}
 	
-	return std::make_unique<Box>( std::move( pColorTrait ),world,pos,size,ang,linVel,angVel );
+	auto spawnedBox = std::make_unique<Box>( std::move( pColorTrait ),world,pos,size,ang,linVel,angVel );
+	return spawnedBox;
 }

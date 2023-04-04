@@ -78,7 +78,7 @@
     <ClInclude Include="Mat3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PubeScreenTransformer.h">
+    <ClInclude Include="PerspectiveScreenTransformer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IndexedTriangleList.h">

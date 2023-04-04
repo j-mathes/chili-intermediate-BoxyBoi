@@ -51,10 +51,10 @@ private:
 	/*  User Variables              */
 	static constexpr float boundarySize = 10.0f;
 	static constexpr float boxSize = 1.0f;
-	static constexpr int nBoxes = 6;
+	static constexpr int nBoxes = 8;
 	std::mt19937 rng = std::mt19937( std::random_device{}() );
 	FrameTimer ft;
-	Pipeline<SolidEffect> pepe;
+	Pipeline<SolidEffect> pipeline;
 	b2World world;
 	Boundaries bounds = Boundaries( world,boundarySize );
 	std::vector<std::unique_ptr<Box>> boxPtrs;
